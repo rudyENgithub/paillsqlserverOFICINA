@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+      
+        <p:dataTable id="tblPrincipal" var="apps"  editable="true" selectionMode="single" selection="#{mBSPantallaInicial.appSelected}" rowKey="#{apps.idAppMovil}" value="#{mBSPantallaInicial.appsList}">
+            
+    <p:column headerText="Id">
+        <h:outputText value="#{apps.idAppMovil}" />
+    </p:column>
+     <p:column headerText="Cod. Bar">
+                <p:cellEditor>
+              
+                    <f:facet name="output"><h:outputText value="#{apps.nombre}" /></f:facet>
+               <f:facet name="input"><p:inputText value="#{apps.nombre}" style="width:100%" label="Co"/></f:facet>
+                </p:cellEditor>
+                
+    </p:column>
+  <p:column headerText="Nombre">
+       <p:cellEditor>
+
+           <f:facet name="output"><h:outputText value="#{apps.descripcion}" /></f:facet>
+               <f:facet name="input"><p:inputText value="#{apps.descripcion}" style="width:100%" label="Na"/></f:facet>
+              
+      </p:cellEditor>
+    </p:column>
+   
+<p:column style="width:32px">
+           <p:rowEditor />
+       </p:column>
+</p:dataTable>
+        
+        
+    </h:body>
+</html>
+
+

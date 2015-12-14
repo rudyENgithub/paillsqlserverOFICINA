@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI at http://jax-ws.dev.java.net. RI's version is Metro/2.2.0-1 (tags/2.2.0u1-7139; 2012-06-02T10:55:19+0000) JAXWS-RI/2.2.6-2 JAXWS/2.2 svn-revision#unknown. --><xs:schema xmlns:tns="http://ws.rudysorto.com/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://ws.rudysorto.com/">
+
+<xs:element name="actualizar" type="tns:actualizar"/>
+
+<xs:element name="appMoviles" type="tns:appMoviles"/>
+
+<xs:element name="eliminar" type="tns:eliminar"/>
+
+<xs:element name="guardar" type="tns:guardar"/>
+
+<xs:element name="selectAll" type="tns:selectAll"/>
+
+<xs:element name="selectAllResponse" type="tns:selectAllResponse"/>
+
+<xs:element name="selectLike" type="tns:selectLike"/>
+
+<xs:element name="selectLikeResponse" type="tns:selectLikeResponse"/>
+
+<xs:complexType name="guardar">
+<xs:sequence>
+<xs:element name="producto" type="tns:appMoviles" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="appMoviles">
+<xs:sequence>
+<xs:element name="descripcion" type="xs:string" minOccurs="0"/>
+<xs:element name="idAppMovil" type="xs:int" minOccurs="0"/>
+<xs:element name="logo" type="xs:base64Binary" minOccurs="0"/>
+<xs:element name="nombre" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="selectLike">
+<xs:sequence>
+<xs:element name="par" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="selectLikeResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:appMoviles" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="selectAll">
+<xs:sequence/>
+</xs:complexType>
+
+<xs:complexType name="selectAllResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:appMoviles" minOccurs="0" maxOccurs="unbounded"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="eliminar">
+<xs:sequence>
+<xs:element name="producto" type="tns:appMoviles" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="actualizar">
+<xs:sequence>
+<xs:element name="producto" type="tns:appMoviles" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+</xs:schema>
