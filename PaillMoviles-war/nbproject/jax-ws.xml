@@ -7,6 +7,9 @@
     <service name="AppsMovilesWS">
       <implementation-class>com.rudysorto.ws.AppsMovilesWS</implementation-class>
     </service>
+    <service name="GuardarRegistrosMMWS">
+      <implementation-class>com.rudysorto.ws.GuardarRegistrosMMWS</implementation-class>
+    </service>
   </services>
   <clients>
     <client name="AppsMovilesWS">

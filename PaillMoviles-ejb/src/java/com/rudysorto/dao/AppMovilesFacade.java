@@ -5,6 +5,11 @@
 package com.rudysorto.dao;
 
 import com.rudysorto.jpa.AppMoviles;
+import com.rudysorto.jpa.Clientes;
+import com.rudysorto.jpa.OpcionesAppMoviles;
+import com.rudysorto.jpa.ProductoMM;
+import com.rudysorto.jpa.Productos;
+import com.rudysorto.jpa.RegistrosMM;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -21,7 +26,12 @@ public class AppMovilesFacade extends AbstractFacade<AppMoviles> implements AppM
     @PersistenceContext(unitName = "PaillMoviles-ejbPU")
     private EntityManager em;
     private List<AppMoviles> appporperfilList;
-
+    private List<OpcionesAppMoviles> opcionesXAppList;
+    private List<Productos> productosLikeList;
+    private List<Clientes> clientesLikeList;
+    private List<ProductoMM> productosBodegaMMList;
+    private List<RegistrosMM> registrosmmList;
+    
     @Override
     protected EntityManager getEntityManager() {
         return em;
@@ -32,43 +42,79 @@ public class AppMovilesFacade extends AbstractFacade<AppMoviles> implements AppM
     }
 
     @Override
-    public List<AppMoviles> listaAppsPerfil(String par) {
-        /*@NamedQuery(name = "Tproducto.findInnerProductoFabricante", query = 
-         "SELECT t FROM Tproducto t JOIN t.Tfabricante f WHERE t.nombre = :nombre OR f.nombre = :nombref"),
-         */
-        //  String jpql = "SELECT t FROM Tproducto t WHERE t.nombre LIKE 'Cer%'";
-        //    String jpql = "SELECT t FROM Tproducto t WHERE t.nombre LIKE :par";
-        // String jpql = "SELECT t FROM Tproducto t JOIN t.tfabricante f WHERE t.nombre LIKE :par OR f.nombre LIKE :par";
-        //  String jpql = "SELECT t FROM Tproducto t WHERE t.nombre = ?1";
-        // SELECT c1, c2 FROM Country c1 INNER JOIN c1.neighbors c2
-       /* String jpql =   "select us.UID, us.Nombre  as 'NombreUsuario' , pm.Nombre  as 'NombrePerfil', pm.Descripcion  as 'DescripcionPerfil' ,\n" +
+    public List<OpcionesAppMoviles> listaAppsPerfil(String par) {
+
+              String jpql = "select opxapp.IdOpcionesAppMoviles,  opxapp.Nombre, opxapp.Descripcion, opxapp.Logo, opxapp.IdAppMovil, usu.IdEmpleado from Usuarios usu inner join  Empleados emp on usu.IdEmpleado = emp.IdEmpleado inner join PerfilesMoviles permo on usu.IdPerfilMovil = permo.IdPerfilMovil   inner join AppPorPerfiles appxper on usu.IdPerfilMovil = appxper.IdPerfilMovil   inner join  AppMoviles appmo on appxper.IdAppMovil = appmo.IdAppMovil inner join OpcionesAppMoviles opxapp on appmo.IdAppMovil = opxapp.IdAppMovil where usu.uid = ?";
+     Query query =   em.createNativeQuery(jpql, OpcionesAppMoviles.class);
+        query.setParameter(1,  par);
+     opcionesXAppList = query.getResultList();
+        return opcionesXAppList;
+    }
+
+    @Override
+    public List<OpcionesAppMoviles> listaOpcionesApp(int par) {  
+         String jpql3 = "SELECT OA FROM OpcionesAppMoviles OA INNER JOIN OA.idAppMovil AM WHERE AM.idAppMovil = :par";
+        Query query = em.createQuery(jpql3);
+         query.setParameter("par", par);
+        opcionesXAppList = query.getResultList();
+        return opcionesXAppList;
+    }
+
+    @Override
+    public List<Productos> productosLike(String par, String id) {
+      /*  String jpql = "SELECT EX.productos FROM Existencias EX "
+                + " WHERE EX.bodegas.idBodega = '59' AND EX.productos.idProducto LIKE :par"
+                + " OR EX.productos.nombre LIKE :par";*/
+     String jpql = "SELECT PR FROM Productos PR where PR.idProducto LIKE :par OR PR.nombre LIKE :par" ;
+                
+        Query query = em.createQuery(jpql);  
+        
+          String jpql1 =   "select DISTINCT pro.IdProducto, pro.Nombre from bodegaVirtualMM vb inner join Productos pro on vb.IdProducto = pro.IdProducto and vb.IdVendedor = ? where   pro.IdProducto = ? or pro.Nombre like ? ";
+        //   String jpql1 =   "select PRO.IdProducto, PRO.Nombre from Productos  PRO where PRO.Nombre LIKE ? ";
+            
+          Query query2 =   em.createNativeQuery(jpql1, Productos.class);
+    query2.setParameter(1, id);      
+query2.setParameter(2,  par);
+query2.setParameter(3, "%"+ par +"%");
+//query2.setParameter(1,  "%"+ par +"%");
+       //  query2.setParameter("par", "%"+ par +"%");  
+         productosLikeList = query2.getResultList();
+        return productosLikeList; 
+        
+          /* String jpql =   "select us.UID, us.Nombre  as 'NombreUsuario' , pm.Nombre  as 'NombrePerfil', pm.Descripcion  as 'DescripcionPerfil' ,\n" +
          " am.Nombre  as NombreApp, am.Descripcion as 'DescripcionMovil' , am.Logo from Usuarios us inner join PerfilesMoviles pm \n" +
          "on us.IdPerfilMovil = pm.IdPerfilMovil inner join AppPorPerfiles ap on us.IdPerfilMovil = ap.IdPerfilMovil\n" +
          "inner join AppMoviles am on ap.IdAppMovil = am.IdAppMovil\n" +
          "where us.UID = :par" ;*/
+        
+    }
 
-        /* select am.* from AppMoviles  am inner join AppPorPerfiles ap on am.idAppMovil
-         = ap.IdAppMovil where ap.idPerfilMovil = 1*/
+    @Override
+    public List<Clientes> clientesLike(String par) {
+        String jpql =   "select top 10 IdCliente, Nombre from Clientes where IdCliente = ? or Nombre Like ?";
+     Query query =   em.createNativeQuery(jpql, Clientes.class);
+        query.setParameter(1, par);
+query.setParameter(2, "%"+ par +"%");
+     clientesLikeList = query.getResultList();
+        return clientesLikeList; 
+    }
 
-        String jpql1 = "SELECT am.* from Usuarios us inner join PerfilesMoviles pm on us.idPerfilMovil = pm.idPerfilMovil inner join AppPorPerfiles ap on pm.idPerfilMovil = ap.idPerfilMovil inner join AppMoviles am on ap.idAppMovil = am.IdAppMovil where us.UID = ?";
-        String jpqlx = "SELECT m FROM AppMoviles m WHERE m.idAppMovil = :par ";
-        /*  @NamedQuery(name = "BlogMembers.findBlogsOnWhichCommentsAreMade", 
-         query = "SELECT bm.blogId FROM BlogMembers bm INNER JOIN bm.blogId b 
-         INNER JOIN b.blogPostsList bp INNER JOIN bp.blogPostCommentList bpc 
-         INNER JOIN bpc.blogMembersId bmt WHERE bm.userId = :userId")*/
-        //  Query query = em.createQuery(jpql); 
-        //  select m from Member m join m.roles mr where mr.role_id = 2
-        String jpql3 = "SELECT AP FROM Usuarios US INNER JOIN US.idPerfilMovil PM INNER JOIN PM.appMovilesList AP INNER JOIN AP.idAppMovil AM WHERE US.uid = :par";
-      //  String jpql = "SELECT AM FROM AppMoviles AM JOIN AM.perfilesMovilesList PAM WHERE PAM.idPerfilMovil = :par";
-        // Query query =   em.createNativeQuery(jpql1);
-        Query query = em.createQuery(jpql3);
-        //query.setParameter(1, par);
-      //  query.setParameter("par", Integer.parseInt(par));
-         query.setParameter("par", par);
-        //    query.setParameter("par", "%"+ par +"%");
-        appporperfilList = query.getResultList();
-        //em.close();
-        return appporperfilList;
+    @Override
+    public List<ProductoMM> productosBodegaVirtual(String par) {
+        String jpql =   "select distinct pro.IdProducto, pro.Nombre, vb.cantidad as 'entrada', IsNULL(sum(mmdet.Cantidad),0) as 'salida', ( vb.cantidad - IsNULL(sum(mmdet.Cantidad),0)) as diferencia from bodegaVirtualMM vb inner join Productos pro on vb.IdProducto = pro.IdProducto left join RegistrosMMdet mmdet on  pro.IdProducto = mmdet.IdProducto where vb.IdVendedor = ?  group by pro.IdProducto, pro.Nombre, vb.cantidad";
+     Query query =   em.createNativeQuery(jpql, ProductoMM.class);
+        query.setParameter(1,  par);
+     productosBodegaMMList = query.getResultList();
+        return productosBodegaMMList;
+    }
+
+    @Override
+    public List<RegistrosMM> registrosMMPorVendedor(String par) {
+         String jpql =   "select reg.IdRegMM,   cli.IdCliente, cli.Nombre, reg.Longitud, reg.Latitud, sum(regdet.Cantidad) as totalmm from RegistrosMM reg inner join RegistrosMMdet regdet on reg.IdRegMM = regdet.IdRegMM  inner join Clientes cli on reg.IdCliente = cli.IdCliente where reg.IdVendedor = ? group by reg.IdRegMM, cli.IdCliente, cli.Nombre, reg.Longitud, reg.Latitud";
+     Query query =   em.createNativeQuery(jpql, RegistrosMM.class);
+        query.setParameter(1,  par);
+     registrosmmList = query.getResultList();
+        return registrosmmList;
 
     }
 }

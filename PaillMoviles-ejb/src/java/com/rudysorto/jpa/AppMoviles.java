@@ -16,6 +16,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -55,6 +56,8 @@ public class AppMoviles implements Serializable {
         @JoinColumn(name = "IdPerfilMovil", referencedColumnName = "IdPerfilMovil")})
     @ManyToMany
     private List<PerfilesMoviles> perfilesMovilesList;
+    @OneToMany(mappedBy = "idAppMovil")
+    private List<OpcionesAppMoviles> opcionesAppMovilesList;
 
     public AppMoviles() {
     }
@@ -102,6 +105,15 @@ public class AppMoviles implements Serializable {
 
     public void setPerfilesMovilesList(List<PerfilesMoviles> perfilesMovilesList) {
         this.perfilesMovilesList = perfilesMovilesList;
+    }
+
+    @XmlTransient
+    public List<OpcionesAppMoviles> getOpcionesAppMovilesList() {
+        return opcionesAppMovilesList;
+    }
+
+    public void setOpcionesAppMovilesList(List<OpcionesAppMoviles> opcionesAppMovilesList) {
+        this.opcionesAppMovilesList = opcionesAppMovilesList;
     }
 
     @Override

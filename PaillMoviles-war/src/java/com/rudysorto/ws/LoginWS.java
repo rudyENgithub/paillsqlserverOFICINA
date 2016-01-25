@@ -37,13 +37,9 @@ public class LoginWS {
       String resp ;
          try {
         Class.forName(SQL_JDBC_DRIVER);// Register jdbc driver
-
         System.out.println("****Connect to Database****");
-
         //4. open a connection
         connection = DriverManager.getConnection(URL, uid, password);
-        
-
         System.out.println("DataBase connect to: "+ connection.getMetaData().getDriverName());
         System.out.println("URL: "+ connection.getMetaData().getURL());
         resp = "OK";
