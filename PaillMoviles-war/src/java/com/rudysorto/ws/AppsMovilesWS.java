@@ -6,10 +6,13 @@ package com.rudysorto.ws;
 
 import com.rudysorto.jpa.AppMoviles;
 import com.rudysorto.jpa.Clientes;
+import com.rudysorto.jpa.Clientesfv;
+import com.rudysorto.jpa.Vendedores;
 import com.rudysorto.jpa.OpcionesAppMoviles;
 import com.rudysorto.jpa.ProductoMM;
 import com.rudysorto.jpa.Productos;
 import com.rudysorto.jpa.RegistrosMM;
+import com.rudysorto.jpa.RegistrosMMdet;
 import com.rudysorto.ln.AppsMovilesLNLocal;
 import java.util.List;
 import javax.ejb.EJB;
@@ -67,8 +70,8 @@ public class AppsMovilesWS {
     }
     
       @WebMethod(operationName = "clientesLike")
-    public List<Clientes> clientesLike(@WebParam(name = "par") String par) {
-        return ejbRef.clientesLike(par);
+    public List<Clientes> clientesLike(@WebParam(name = "par") String par,  @WebParam(name = "IdEmpleado") String IdEmpleado) {
+        return ejbRef.clientesLike(par, IdEmpleado);
     }
       
          @WebMethod(operationName = "productosBodega")
@@ -80,8 +83,21 @@ public class AppsMovilesWS {
     public List<RegistrosMM> registrosMMPorVendedor(@WebParam(name = "par") String par) {
         return ejbRef.registrosMMPorVendedor(par);
     }
+               
+                           @WebMethod(operationName = "selectAllEjecutivos")
+    public List<Vendedores> selectAllEjecutivos() {
+        return ejbRef.selectAllEjecutivos();
+    }
 
+                           
+                                    @WebMethod(operationName = "likeEjecutivos")
+    public List<Vendedores> likeEjecutivos(@WebParam(name = "par") String par) {
+        return ejbRef.likeEjecutivos(par);
+    }
  
-    
+                              @WebMethod(operationName = "clientesporvendedor")
+    public List<RegistrosMMdet> clientesporvendedor(@WebParam(name = "idvendedor") String idvendedor) {
+        return ejbRef.clientesporvendedor(idvendedor);
+    }
     
 }

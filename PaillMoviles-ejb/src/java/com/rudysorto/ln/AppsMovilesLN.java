@@ -8,11 +8,17 @@ import com.rudysorto.dao.AppMovilesFacade;
 import com.rudysorto.dao.AppMovilesFacadeLocal;
 import com.rudysorto.jpa.AppMoviles;
 import com.rudysorto.jpa.Clientes;
+import com.rudysorto.jpa.Clientesfv;
+import com.rudysorto.jpa.Vendedores;
 import com.rudysorto.jpa.OpcionesAppMoviles;
 import com.rudysorto.jpa.ProductoMM;
 import com.rudysorto.jpa.Productos;
 import com.rudysorto.jpa.RegistrosMM;
+import com.rudysorto.jpa.RegistrosMMdet;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.List;
+import javassist.bytecode.analysis.Util;
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
 
@@ -67,8 +73,8 @@ public class AppsMovilesLN implements AppsMovilesLNLocal {
     }
 
     @Override
-    public List<Clientes> clientesLike(String par) {
-      return appMovilesFacade.clientesLike(par);
+    public List<Clientes> clientesLike(String par, String IdEmpleado) {
+      return appMovilesFacade.clientesLike(par, IdEmpleado);
         
         
     }
@@ -83,6 +89,34 @@ public class AppsMovilesLN implements AppsMovilesLNLocal {
     public List<RegistrosMM> registrosMMPorVendedor(String par) {
         return appMovilesFacade.registrosMMPorVendedor(par);
         
+    }
+
+    @Override
+    public List<Vendedores> selectAllEjecutivos() {
+        
+           return appMovilesFacade.selectALlEjecutivos();
+        }
+
+    @Override
+    public List<Vendedores> likeEjecutivos(String par) {
+        
+         return appMovilesFacade.likeEjecutivos(par);
+    }
+
+    @Override
+    public List<RegistrosMMdet> clientesporvendedor(String idvendedor) {
+        
+          return appMovilesFacade.clientesporVendedor(idvendedor);
+    }
+
+    @Override
+    public String login(String uid, String password) {
+     
+      String resp ;
+      Connectionr conex = Connectionr.getInstance() ;
+       resp = conex.conectar(uid, password);
+        
+        return resp;
     }
 
   

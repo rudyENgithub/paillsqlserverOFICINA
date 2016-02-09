@@ -81,6 +81,180 @@ import javax.xml.bind.annotation.XmlTransient;
 */
     })
 public class Productos implements Serializable {
+    @Size(max = 1073741823)
+    @Column(name = "Descripcion")
+    private String descripcion;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 5)
+    @Column(name = "IdSucursal")
+    private String idSucursal;
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "Costo")
+    private BigDecimal costo;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "CostoAnt")
+    private BigDecimal costoAnt;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "CostoStd")
+    private BigDecimal costoStd;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 2)
+    @Column(name = "TipoCosto")
+    private String tipoCosto;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "ExistMin")
+    private BigDecimal existMin;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "ConsumoProm")
+    private BigDecimal consumoProm;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "TiempoExistMin")
+    private short tiempoExistMin;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 2)
+    @Column(name = "TipoIVA")
+    private String tipoIVA;
+    @Size(max = 25)
+    @Column(name = "RegSanitario")
+    private String regSanitario;
+    @Size(max = 100)
+    @Column(name = "FormaFarma")
+    private String formaFarma;
+    @Size(max = 100)
+    @Column(name = "Concentracion")
+    private String concentracion;
+    @Column(name = "VidaUtil")
+    private Short vidaUtil;
+    @Size(max = 15)
+    @Column(name = "IdProveedor")
+    private String idProveedor;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "Homologado")
+    private boolean homologado;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "Controlado")
+    private boolean controlado;
+    @Size(max = 15)
+    @Column(name = "Combo")
+    private String combo;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "AfectaInv")
+    private boolean afectaInv;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "Activo")
+    private boolean activo;
+    @Column(name = "Peso")
+    private BigDecimal peso;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "Medida")
+    private BigDecimal medida;
+    @Size(max = 15)
+    @Column(name = "Talla")
+    private String talla;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 50)
+    @Column(name = "Color")
+    private String color;
+    @Size(max = 1073741823)
+    @Column(name = "Colores")
+    private String colores;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 1)
+    @Column(name = "ABC")
+    private String abc;
+    @Column(name = "Garantia")
+    private BigDecimal garantia;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 1)
+    @Column(name = "SerieLote")
+    private String serieLote;
+    @Size(max = 15)
+    @Column(name = "Substituto1")
+    private String substituto1;
+    @Size(max = 15)
+    @Column(name = "Substituto2")
+    private String substituto2;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 25)
+    @Column(name = "IdCtaCont1")
+    private String idCtaCont1;
+    @Size(max = 25)
+    @Column(name = "IdCtaCont2")
+    private String idCtaCont2;
+    @Size(max = 25)
+    @Column(name = "IdCtaCont3")
+    private String idCtaCont3;
+    @Size(max = 25)
+    @Column(name = "IdCtaCont4")
+    private String idCtaCont4;
+    @Size(max = 25)
+    @Column(name = "IdCtaCont5")
+    private String idCtaCont5;
+    @Size(max = 25)
+    @Column(name = "IdCtaCont6")
+    private String idCtaCont6;
+    @Size(max = 25)
+    @Column(name = "IdCtaCont7")
+    private String idCtaCont7;
+    @Size(max = 25)
+    @Column(name = "IdCtaCont8")
+    private String idCtaCont8;
+    @Lob
+    @Column(name = "Foto")
+    private byte[] foto;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 1073741823)
+    @Column(name = "Bitacora")
+    private String bitacora;
+    @Column(name = "Descontinuado")
+    private Boolean descontinuado;
+    @Size(max = 1073741823)
+    @Column(name = "NombreLic")
+    private String nombreLic;
+    @Column(name = "Costo_b")
+    private BigDecimal costob;
+    @Column(name = "bloqueoregistros")
+    private Boolean bloqueoregistros;
+    @JoinColumn(name = "IdUnidad", referencedColumnName = "IdUnidad")
+    @ManyToOne(optional = false)
+    private Unidades idUnidad;
+    @JoinColumn(name = "TipoProd", referencedColumnName = "TipoProd")
+    @ManyToOne(optional = false)
+    private TiposProd tipoProd;
+    @JoinColumn(name = "IdSubgrupo", referencedColumnName = "IdSubgrupo")
+    @ManyToOne(optional = false)
+    private Subgrupos idSubgrupo;
+    @JoinColumn(name = "IdFamilia", referencedColumnName = "IdSubgrupo")
+    @ManyToOne
+    private Subgrupos idFamilia;
+    @JoinColumn(name = "IdPresenta", referencedColumnName = "IdPresenta")
+    @ManyToOne(optional = false)
+    private Presentaciones idPresenta;
+    @JoinColumn(name = "IdMarca", referencedColumnName = "IdMarca")
+    @ManyToOne(optional = false)
+    private Marcas idMarca;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idProducto")
+    private List<RegistrosMMdet> registrosMMdetList;
     
     
  @Id
@@ -770,5 +944,414 @@ public class Productos implements Serializable {
     public void setBodegaVirtualMMList(List<BodegaVirtualMM> bodegaVirtualMMList) {
         this.bodegaVirtualMMList = bodegaVirtualMMList;
     }*/
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public String getIdSucursal() {
+        return idSucursal;
+    }
+
+    public void setIdSucursal(String idSucursal) {
+        this.idSucursal = idSucursal;
+    }
+
+    public BigDecimal getCosto() {
+        return costo;
+    }
+
+    public void setCosto(BigDecimal costo) {
+        this.costo = costo;
+    }
+
+    public BigDecimal getCostoAnt() {
+        return costoAnt;
+    }
+
+    public void setCostoAnt(BigDecimal costoAnt) {
+        this.costoAnt = costoAnt;
+    }
+
+    public BigDecimal getCostoStd() {
+        return costoStd;
+    }
+
+    public void setCostoStd(BigDecimal costoStd) {
+        this.costoStd = costoStd;
+    }
+
+    public String getTipoCosto() {
+        return tipoCosto;
+    }
+
+    public void setTipoCosto(String tipoCosto) {
+        this.tipoCosto = tipoCosto;
+    }
+
+    public BigDecimal getExistMin() {
+        return existMin;
+    }
+
+    public void setExistMin(BigDecimal existMin) {
+        this.existMin = existMin;
+    }
+
+    public BigDecimal getConsumoProm() {
+        return consumoProm;
+    }
+
+    public void setConsumoProm(BigDecimal consumoProm) {
+        this.consumoProm = consumoProm;
+    }
+
+    public short getTiempoExistMin() {
+        return tiempoExistMin;
+    }
+
+    public void setTiempoExistMin(short tiempoExistMin) {
+        this.tiempoExistMin = tiempoExistMin;
+    }
+
+    public String getTipoIVA() {
+        return tipoIVA;
+    }
+
+    public void setTipoIVA(String tipoIVA) {
+        this.tipoIVA = tipoIVA;
+    }
+
+    public String getRegSanitario() {
+        return regSanitario;
+    }
+
+    public void setRegSanitario(String regSanitario) {
+        this.regSanitario = regSanitario;
+    }
+
+    public String getFormaFarma() {
+        return formaFarma;
+    }
+
+    public void setFormaFarma(String formaFarma) {
+        this.formaFarma = formaFarma;
+    }
+
+    public String getConcentracion() {
+        return concentracion;
+    }
+
+    public void setConcentracion(String concentracion) {
+        this.concentracion = concentracion;
+    }
+
+    public Short getVidaUtil() {
+        return vidaUtil;
+    }
+
+    public void setVidaUtil(Short vidaUtil) {
+        this.vidaUtil = vidaUtil;
+    }
+
+    public String getIdProveedor() {
+        return idProveedor;
+    }
+
+    public void setIdProveedor(String idProveedor) {
+        this.idProveedor = idProveedor;
+    }
+
+    public boolean getHomologado() {
+        return homologado;
+    }
+
+    public void setHomologado(boolean homologado) {
+        this.homologado = homologado;
+    }
+
+    public boolean getControlado() {
+        return controlado;
+    }
+
+    public void setControlado(boolean controlado) {
+        this.controlado = controlado;
+    }
+
+    public String getCombo() {
+        return combo;
+    }
+
+    public void setCombo(String combo) {
+        this.combo = combo;
+    }
+
+    public boolean getAfectaInv() {
+        return afectaInv;
+    }
+
+    public void setAfectaInv(boolean afectaInv) {
+        this.afectaInv = afectaInv;
+    }
+
+    public boolean getActivo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
+    }
+
+    public BigDecimal getPeso() {
+        return peso;
+    }
+
+    public void setPeso(BigDecimal peso) {
+        this.peso = peso;
+    }
+
+    public BigDecimal getMedida() {
+        return medida;
+    }
+
+    public void setMedida(BigDecimal medida) {
+        this.medida = medida;
+    }
+
+    public String getTalla() {
+        return talla;
+    }
+
+    public void setTalla(String talla) {
+        this.talla = talla;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getColores() {
+        return colores;
+    }
+
+    public void setColores(String colores) {
+        this.colores = colores;
+    }
+
+    public String getAbc() {
+        return abc;
+    }
+
+    public void setAbc(String abc) {
+        this.abc = abc;
+    }
+
+    public BigDecimal getGarantia() {
+        return garantia;
+    }
+
+    public void setGarantia(BigDecimal garantia) {
+        this.garantia = garantia;
+    }
+
+    public String getSerieLote() {
+        return serieLote;
+    }
+
+    public void setSerieLote(String serieLote) {
+        this.serieLote = serieLote;
+    }
+
+    public String getSubstituto1() {
+        return substituto1;
+    }
+
+    public void setSubstituto1(String substituto1) {
+        this.substituto1 = substituto1;
+    }
+
+    public String getSubstituto2() {
+        return substituto2;
+    }
+
+    public void setSubstituto2(String substituto2) {
+        this.substituto2 = substituto2;
+    }
+
+    public String getIdCtaCont1() {
+        return idCtaCont1;
+    }
+
+    public void setIdCtaCont1(String idCtaCont1) {
+        this.idCtaCont1 = idCtaCont1;
+    }
+
+    public String getIdCtaCont2() {
+        return idCtaCont2;
+    }
+
+    public void setIdCtaCont2(String idCtaCont2) {
+        this.idCtaCont2 = idCtaCont2;
+    }
+
+    public String getIdCtaCont3() {
+        return idCtaCont3;
+    }
+
+    public void setIdCtaCont3(String idCtaCont3) {
+        this.idCtaCont3 = idCtaCont3;
+    }
+
+    public String getIdCtaCont4() {
+        return idCtaCont4;
+    }
+
+    public void setIdCtaCont4(String idCtaCont4) {
+        this.idCtaCont4 = idCtaCont4;
+    }
+
+    public String getIdCtaCont5() {
+        return idCtaCont5;
+    }
+
+    public void setIdCtaCont5(String idCtaCont5) {
+        this.idCtaCont5 = idCtaCont5;
+    }
+
+    public String getIdCtaCont6() {
+        return idCtaCont6;
+    }
+
+    public void setIdCtaCont6(String idCtaCont6) {
+        this.idCtaCont6 = idCtaCont6;
+    }
+
+    public String getIdCtaCont7() {
+        return idCtaCont7;
+    }
+
+    public void setIdCtaCont7(String idCtaCont7) {
+        this.idCtaCont7 = idCtaCont7;
+    }
+
+    public String getIdCtaCont8() {
+        return idCtaCont8;
+    }
+
+    public void setIdCtaCont8(String idCtaCont8) {
+        this.idCtaCont8 = idCtaCont8;
+    }
+
+    public byte[] getFoto() {
+        return foto;
+    }
+
+    public void setFoto(byte[] foto) {
+        this.foto = foto;
+    }
+
+    public String getBitacora() {
+        return bitacora;
+    }
+
+    public void setBitacora(String bitacora) {
+        this.bitacora = bitacora;
+    }
+
+    public Boolean getDescontinuado() {
+        return descontinuado;
+    }
+
+    public void setDescontinuado(Boolean descontinuado) {
+        this.descontinuado = descontinuado;
+    }
+
+    public String getNombreLic() {
+        return nombreLic;
+    }
+
+    public void setNombreLic(String nombreLic) {
+        this.nombreLic = nombreLic;
+    }
+
+    public BigDecimal getCostob() {
+        return costob;
+    }
+
+    public void setCostob(BigDecimal costob) {
+        this.costob = costob;
+    }
+
+    public Boolean getBloqueoregistros() {
+        return bloqueoregistros;
+    }
+
+    public void setBloqueoregistros(Boolean bloqueoregistros) {
+        this.bloqueoregistros = bloqueoregistros;
+    }
+
+    public Unidades getIdUnidad() {
+        return idUnidad;
+    }
+
+    public void setIdUnidad(Unidades idUnidad) {
+        this.idUnidad = idUnidad;
+    }
+
+    public TiposProd getTipoProd() {
+        return tipoProd;
+    }
+
+    public void setTipoProd(TiposProd tipoProd) {
+        this.tipoProd = tipoProd;
+    }
+
+    public Subgrupos getIdSubgrupo() {
+        return idSubgrupo;
+    }
+
+    public void setIdSubgrupo(Subgrupos idSubgrupo) {
+        this.idSubgrupo = idSubgrupo;
+    }
+
+    public Subgrupos getIdFamilia() {
+        return idFamilia;
+    }
+
+    public void setIdFamilia(Subgrupos idFamilia) {
+        this.idFamilia = idFamilia;
+    }
+
+    public Presentaciones getIdPresenta() {
+        return idPresenta;
+    }
+
+    public void setIdPresenta(Presentaciones idPresenta) {
+        this.idPresenta = idPresenta;
+    }
+
+    public Marcas getIdMarca() {
+        return idMarca;
+    }
+
+    public void setIdMarca(Marcas idMarca) {
+        this.idMarca = idMarca;
+    }
+
+    @XmlTransient
+    public List<RegistrosMMdet> getRegistrosMMdetList() {
+        return registrosMMdetList;
+    }
+
+    public void setRegistrosMMdetList(List<RegistrosMMdet> registrosMMdetList) {
+        this.registrosMMdetList = registrosMMdetList;
+    }
     
 }

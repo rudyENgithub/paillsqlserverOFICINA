@@ -6,10 +6,13 @@ package com.rudysorto.dao;
 
 import com.rudysorto.jpa.AppMoviles;
 import com.rudysorto.jpa.Clientes;
+import com.rudysorto.jpa.Clientesfv;
+import com.rudysorto.jpa.Vendedores;
 import com.rudysorto.jpa.OpcionesAppMoviles;
 import com.rudysorto.jpa.ProductoMM;
 import com.rudysorto.jpa.Productos;
 import com.rudysorto.jpa.RegistrosMM;
+import com.rudysorto.jpa.RegistrosMMdet;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -29,8 +32,10 @@ public class AppMovilesFacade extends AbstractFacade<AppMoviles> implements AppM
     private List<OpcionesAppMoviles> opcionesXAppList;
     private List<Productos> productosLikeList;
     private List<Clientes> clientesLikeList;
+        private List<RegistrosMMdet> clientesPorVendedor;
     private List<ProductoMM> productosBodegaMMList;
     private List<RegistrosMM> registrosmmList;
+    private List<Vendedores> ejecutivosList;
     
     @Override
     protected EntityManager getEntityManager() {
@@ -90,10 +95,10 @@ query2.setParameter(3, "%"+ par +"%");
     }
 
     @Override
-    public List<Clientes> clientesLike(String par) {
-        String jpql =   "select top 10 IdCliente, Nombre from Clientes where IdCliente = ? or Nombre Like ?";
+    public List<Clientes> clientesLike(String par, String idEmpleado) {
+        String jpql =  "select top 10 IdCliente, Nombre from (select * from Clientesfv where IdEmpleado = ?)  sel where Nombre like ? ";
      Query query =   em.createNativeQuery(jpql, Clientes.class);
-        query.setParameter(1, par);
+        query.setParameter(1, idEmpleado);
 query.setParameter(2, "%"+ par +"%");
      clientesLikeList = query.getResultList();
         return clientesLikeList; 
@@ -101,20 +106,53 @@ query.setParameter(2, "%"+ par +"%");
 
     @Override
     public List<ProductoMM> productosBodegaVirtual(String par) {
-        String jpql =   "select distinct pro.IdProducto, pro.Nombre, vb.cantidad as 'entrada', IsNULL(sum(mmdet.Cantidad),0) as 'salida', ( vb.cantidad - IsNULL(sum(mmdet.Cantidad),0)) as diferencia from bodegaVirtualMM vb inner join Productos pro on vb.IdProducto = pro.IdProducto left join RegistrosMMdet mmdet on  pro.IdProducto = mmdet.IdProducto where vb.IdVendedor = ?  group by pro.IdProducto, pro.Nombre, vb.cantidad";
-     Query query =   em.createNativeQuery(jpql, ProductoMM.class);
+       // String jpql =   "select distinct pro.IdProducto, pro.Nombre, vb.cantidad as 'entrada', IsNULL(sum(mmdet.Cantidad),0) as 'salida', ( vb.cantidad - IsNULL(sum(mmdet.Cantidad),0)) as diferencia from bodegaVirtualMM vb inner join Productos pro on vb.IdProducto = pro.IdProducto left join RegistrosMMdet mmdet on  pro.IdProducto = mmdet.IdProducto where vb.IdVendedor = ?  group by pro.IdProducto, pro.Nombre, vb.cantidad";
+    String jpql =   "	select distinct pro.IdProducto, pro.Nombre, vb.cantidad as 'entrada', IsNULL(sum(mmdet.Cantidad),0) as 'salida', ( vb.cantidad - IsNULL(sum(mmdet.Cantidad),0))  as diferencia from bodegaVirtualMM vb inner join Productos pro on vb.IdProducto = pro.IdProducto and vb.IdVendedor = ?  left join  RegistrosMM mm on mm.IdVendedor = ? left join RegistrosMMdet mmdet on  mm.IdRegMM = mmdet.IdRegMM and pro.IdProducto = mmdet.IdProducto group by pro.IdProducto, pro.Nombre, vb.cantidad";
+        Query query =   em.createNativeQuery(jpql, ProductoMM.class);
         query.setParameter(1,  par);
+        query.setParameter(2,  par);
      productosBodegaMMList = query.getResultList();
         return productosBodegaMMList;
     }
 
     @Override
     public List<RegistrosMM> registrosMMPorVendedor(String par) {
-         String jpql =   "select reg.IdRegMM,   cli.IdCliente, cli.Nombre, reg.Longitud, reg.Latitud, sum(regdet.Cantidad) as totalmm from RegistrosMM reg inner join RegistrosMMdet regdet on reg.IdRegMM = regdet.IdRegMM  inner join Clientes cli on reg.IdCliente = cli.IdCliente where reg.IdVendedor = ? group by reg.IdRegMM, cli.IdCliente, cli.Nombre, reg.Longitud, reg.Latitud";
+         String jpql =   "select reg.IdRegMM,   cli.IdCliente, cli.Nombre, reg.Longitud, reg.Latitud, sum(regdet.Cantidad) as totalmm from RegistrosMM reg inner join RegistrosMMdet regdet on reg.IdRegMM = regdet.IdRegMM  inner join Clientesfv cli on reg.IdCliente = cli.IdCliente where reg.IdVendedor = ? group by reg.IdRegMM, cli.IdCliente, cli.Nombre, reg.Longitud, reg.Latitud";
      Query query =   em.createNativeQuery(jpql, RegistrosMM.class);
         query.setParameter(1,  par);
      registrosmmList = query.getResultList();
         return registrosmmList;
 
+    }
+
+    @Override
+    public List<Vendedores> selectALlEjecutivos() {
+       
+         String jpql =   "select distinct vb.IdVendedor, (em.Nombre +' '+ em.Apellido) as Nombre, ven.Grupo  from bodegaVirtualMM vb inner join Empleados em on vb.IdVendedor = em.IdEmpleado  inner join  Vendedores ven on em.IdEmpleado = ven.IdEmpleado";
+     Query query =   em.createNativeQuery(jpql, Vendedores.class);
+     ejecutivosList = query.getResultList();
+        return ejecutivosList;
+    }
+
+    @Override
+    public List<Vendedores> likeEjecutivos(String par) {
+        
+         String jpql =   "select top 10 * from (select distinct vb.IdVendedor, (em.Nombre +' '+ em.Apellido) as Nombre, ven.Grupo  from bodegaVirtualMM vb inner join Empleados em on vb.IdVendedor  = em.IdEmpleado  inner join  Vendedores ven on em.IdEmpleado = ven.IdEmpleado ) sel where Nombre like ?";
+     Query query =   em.createNativeQuery(jpql, Vendedores.class);
+     query.setParameter(1, "%"+ par +"%");
+     ejecutivosList = query.getResultList();
+        return ejecutivosList; 
+        
+    }
+
+    @Override
+    public List<RegistrosMMdet> clientesporVendedor(String idempleado) {
+       
+        String jpql =   "select mm.IdCliente, cf.Nombre, mmdet.IdProducto, pro.Nombre as NombreProducto, mmdet.Cantidad ,  mm.Guardado from RegistrosMM mm inner join Clientesfv cf on mm.IdCliente = cf.IdCliente and mm.IdVendedor = ? inner join RegistrosMMdet mmdet on mmdet.IdRegMM = mm.IdRegMM inner join Productos pro on mmdet.IdProducto = pro.IdProducto";
+     Query query =   em.createNativeQuery(jpql, RegistrosMMdet.class);
+     query.setParameter(1,  idempleado );
+     clientesPorVendedor = query.getResultList();
+        return clientesPorVendedor; 
+       
     }
 }

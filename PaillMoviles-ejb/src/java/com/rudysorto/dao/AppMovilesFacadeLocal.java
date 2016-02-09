@@ -6,10 +6,13 @@ package com.rudysorto.dao;
 
 import com.rudysorto.jpa.AppMoviles;
 import com.rudysorto.jpa.Clientes;
+import com.rudysorto.jpa.Clientesfv;
+import com.rudysorto.jpa.Vendedores;
 import com.rudysorto.jpa.OpcionesAppMoviles;
 import com.rudysorto.jpa.ProductoMM;
 import com.rudysorto.jpa.Productos;
 import com.rudysorto.jpa.RegistrosMM;
+import com.rudysorto.jpa.RegistrosMMdet;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -40,12 +43,17 @@ public interface AppMovilesFacadeLocal {
    
    public List<Productos> productosLike(String par, String id);
    
-   public List<Clientes> clientesLike(String par);
+   public List<Clientes> clientesLike(String par, String idempleado);
    
    public List<ProductoMM> productosBodegaVirtual(String par);
    
    public List<RegistrosMM> registrosMMPorVendedor(String par);
 
 
+   public List<Vendedores> selectALlEjecutivos();
+   
+   public List<Vendedores> likeEjecutivos(String par);
+   
+   public List<RegistrosMMdet> clientesporVendedor(String idempleado);
     
 }

@@ -4,6 +4,7 @@
  */
 package com.rudysorto.ws;
 
+import com.rudysorto.ln.Connectionr;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import javax.jws.WebService;
@@ -16,11 +17,6 @@ import javax.jws.WebParam;
  */
 @WebService(serviceName = "LoginWS")
 public class LoginWS {
-     private static Connection connection = null;
-        private static String SQL_JDBC_DRIVER = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
-        private static String URL = "jdbc:sqlserver://192.168.16.3\\SILDEGRA;databaseName=V3GrupoPlanillas";
-
-
     /**
      * This is a sample web service operation
      */
@@ -34,8 +30,10 @@ public class LoginWS {
      */
    @WebMethod(operationName = "login")
     public String login(@WebParam(name = "uid") String uid, @WebParam(name = "password") String password) {
-      String resp ;
-         try {
+       String resp;
+       Connectionr conex = Connectionr.getInstance() ;
+       resp = conex.conectar(uid, password);
+       /*  try {
         Class.forName(SQL_JDBC_DRIVER);// Register jdbc driver
         System.out.println("****Connect to Database****");
         //4. open a connection
@@ -49,7 +47,7 @@ public class LoginWS {
         e.printStackTrace();
         System.err.println("Exception in getLocalConeection() "+e.getMessage());
         resp = "ERR";
-    }
+    }*/
         
         return resp;
     }
