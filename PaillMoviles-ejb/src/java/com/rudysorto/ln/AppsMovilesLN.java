@@ -9,12 +9,15 @@ import com.rudysorto.dao.AppMovilesFacadeLocal;
 import com.rudysorto.jpa.AppMoviles;
 import com.rudysorto.jpa.Clientes;
 import com.rudysorto.jpa.Clientesfv;
+import com.rudysorto.jpa.Doctoress;
+import com.rudysorto.jpa.Escalas;
 import com.rudysorto.jpa.Vendedores;
 import com.rudysorto.jpa.OpcionesAppMoviles;
 import com.rudysorto.jpa.ProductoMM;
 import com.rudysorto.jpa.Productos;
 import com.rudysorto.jpa.RegistrosMM;
 import com.rudysorto.jpa.RegistrosMMdet;
+import com.rudysorto.jpa.Transacciones;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.List;
@@ -117,6 +120,58 @@ public class AppsMovilesLN implements AppsMovilesLNLocal {
        resp = conex.conectar(uid, password);
         
         return resp;
+    }
+
+    @Override
+    public List<Productos> productoLikePedido(String par) {
+        
+        return appMovilesFacade.productoLikePedido(par);
+        
+    }
+
+    @Override
+    public List<Escalas> escalaPorProducto(String par) {
+        
+       return appMovilesFacade.escalasPorProductos(par);
+    }
+
+    @Override
+    public List<Productos> checkexistencias(String par) {
+        
+         return appMovilesFacade.checkexistencias(par);
+        
+    }
+
+    @Override
+    public List<Clientes> clientesPedidoLike(String par) {
+        
+        return appMovilesFacade.clientesPedidosLike(par);
+    }
+
+    @Override
+    public List<Productos> productosPorVendedor(String par) {
+        
+        return appMovilesFacade.productosPorVendedor(par);
+    }
+
+    @Override
+    public List<Transacciones> transaccionesmedicosmm(String par) {
+         return appMovilesFacade.transaccionesmedicosmm(par);
+        
+    }
+
+    @Override
+    public List<Doctoress> clientesXVendedor(String par) {
+       
+         return appMovilesFacade.clientesXVendedor(par);
+     
+    }
+
+    @Override
+    public List<Escalas> precioPorEscala(String par, String esca) {
+      
+         return appMovilesFacade.precioPorEscala(par, esca);
+        
     }
 
   

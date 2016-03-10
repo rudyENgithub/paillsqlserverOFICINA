@@ -81,7 +81,7 @@ import javax.xml.bind.annotation.XmlTransient;
 */
     })
 public class Productos implements Serializable {
-    @Size(max = 1073741823)
+  /*  @Size(max = 1073741823)
     @Column(name = "Descripcion")
     private String descripcion;
     @Basic(optional = false)
@@ -255,7 +255,7 @@ public class Productos implements Serializable {
     private Marcas idMarca;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idProducto")
     private List<RegistrosMMdet> registrosMMdetList;
-    
+    */
     
  @Id
     @Basic(optional = false)
@@ -268,6 +268,26 @@ public class Productos implements Serializable {
     @Size(min = 1, max = 100)
     @Column(name = "Nombre")
     private String nombre;
+   @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 100)
+    @Column(name = "IdUnidad")
+    private String idUnidad;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 100)
+    @Column(name = "IdBodega")
+    private String idBodega;
+     @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 100)
+    @Column(name = "IdEstatus")
+    private String idEstatus;
+      @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 100)
+    @Column(name = "Lote")
+    private String lote;
   /*  @OneToMany(cascade = CascadeType.ALL, mappedBy = "productos")
     private List<BodegaVirtualMM> bodegaVirtualMMList;
     * */
@@ -277,6 +297,50 @@ public class Productos implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productos")
     private List<Existencias> existenciasList;
     private static final long serialVersionUID = 1L;*/
+
+    public String getIdUnidad() {
+        return idUnidad;
+    }
+
+    public void setIdUnidad(String idUnidad) {
+        this.idUnidad = idUnidad;
+    }
+
+    public String getIdBodega() {
+        return idBodega;
+    }
+
+    public void setIdBodega(String idBodega) {
+        this.idBodega = idBodega;
+    }
+
+    public String getIdEstatus() {
+        return idEstatus;
+    }
+
+    public void setIdEstatus(String idEstatus) {
+        this.idEstatus = idEstatus;
+    }
+
+    public String getLote() {
+        return lote;
+    }
+
+    public void setLote(String lote) {
+        this.lote = lote;
+    }
+
+    public Productos(String idProducto, String nombre, String idUnidad, String idBodega, String idEstatus, String lote) {
+        this.idProducto = idProducto;
+        this.nombre = nombre;
+        this.idUnidad = idUnidad;
+        this.idBodega = idBodega;
+        this.idEstatus = idEstatus;
+        this.lote = lote;
+    }
+    
+    
+    
   
     /*  @Size(max = 1073741823)
   @Column(name = "Descripcion")
@@ -944,7 +1008,7 @@ public class Productos implements Serializable {
     public void setBodegaVirtualMMList(List<BodegaVirtualMM> bodegaVirtualMMList) {
         this.bodegaVirtualMMList = bodegaVirtualMMList;
     }*/
-
+/*
     public String getDescripcion() {
         return descripcion;
     }
@@ -1353,5 +1417,5 @@ public class Productos implements Serializable {
     public void setRegistrosMMdetList(List<RegistrosMMdet> registrosMMdetList) {
         this.registrosMMdetList = registrosMMdetList;
     }
-    
+    */
 }

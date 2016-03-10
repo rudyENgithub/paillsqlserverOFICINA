@@ -7,12 +7,15 @@ package com.rudysorto.ws;
 import com.rudysorto.jpa.AppMoviles;
 import com.rudysorto.jpa.Clientes;
 import com.rudysorto.jpa.Clientesfv;
+import com.rudysorto.jpa.Doctoress;
+import com.rudysorto.jpa.Escalas;
 import com.rudysorto.jpa.Vendedores;
 import com.rudysorto.jpa.OpcionesAppMoviles;
 import com.rudysorto.jpa.ProductoMM;
 import com.rudysorto.jpa.Productos;
 import com.rudysorto.jpa.RegistrosMM;
 import com.rudysorto.jpa.RegistrosMMdet;
+import com.rudysorto.jpa.Transacciones;
 import com.rudysorto.ln.AppsMovilesLNLocal;
 import java.util.List;
 import javax.ejb.EJB;
@@ -100,4 +103,48 @@ public class AppsMovilesWS {
         return ejbRef.clientesporvendedor(idvendedor);
     }
     
+                              
+    @WebMethod(operationName = "productoLikePedido")
+    public List<Productos> productoLikePedido(@WebParam(name = "par") String par) {
+        return ejbRef.productoLikePedido(par);
+    }
+    
+     @WebMethod(operationName = "escalaPorProducto")
+    public List<Escalas> escalaPorProducto(@WebParam(name = "par") String par) {
+        return ejbRef.escalaPorProducto(par);
+    }
+     
+      @WebMethod(operationName = "checkexistencias")
+    public List<Productos> checkexistencias(@WebParam(name = "par") String par) {
+        return ejbRef.checkexistencias(par);
+    }
+      
+      
+       @WebMethod(operationName = "clientesPedidosLike")
+    public List<Clientes> clientesPedidosLike(@WebParam(name = "par") String par) {
+        return ejbRef.clientesPedidoLike(par);
+    }
+       
+        @WebMethod(operationName = "productosPorVendedor")
+    public List<Productos> productosPorVendedor(@WebParam(name = "par") String par) {
+        return ejbRef.productosPorVendedor(par);
+    }
+        
+         @WebMethod(operationName = "transaccionesmedicosmm")
+    public List<Transacciones> transaccionesmedicosmm(@WebParam(name = "par") String par) {
+        return ejbRef.transaccionesmedicosmm(par);
+    }
+         
+    @WebMethod(operationName = "clientesXVendedor")
+    public List<Doctoress> clientesXVendedor(@WebParam(name = "par") String par) {
+        return ejbRef.clientesXVendedor(par);
+    }
+    
+    
+              @WebMethod(operationName = "precioPorEscala")
+    public List<Escalas> precioPorEscala(@WebParam(name = "par") String par,  @WebParam(name = "esca") String esca) {
+        return ejbRef.precioPorEscala(par, esca);
+    }
+              
+              
 }

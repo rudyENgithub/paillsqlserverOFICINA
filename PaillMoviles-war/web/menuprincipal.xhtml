@@ -1,12 +1,406 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html">
-    <h:head>
-        <title>Facelet Title</title>
-    </h:head>
-    <h:body>
-        Menú Principal
-    </h:body>
-</html>
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:pm="http://primefaces.org/mobile"  
+        contentType="text/html"
+        renderKitId="PRIMEFACES_MOBILE">
 
+    <pm:page title="Components">
+        <style>
+            .th-groups th {
+                text-align: center;
+                background-color: rgba(0,0,0,.1);
+                border-right: 1px solid #fff;
+            }
+            .ui-li-custom .ui-li-count {
+                right: 10px !important;
+            }            
+        </style>     
+
+        <script type="text/javascript">  
+            function deleteCookie(name)
+            {
+                document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/paillsys';
+            }
+            
+            function eraseCookie(){
+                deleteCookie('login');
+                deleteCookie('password');
+                deleteCookie('bd');
+            }
+        </script>  
+
+        <h:form id="messages">
+            <p:growl id="messageError" for="msgError" showDetail="true" widgetVar="messageError" showSummary="true" />
+
+            <p:remoteCommand  name="cleanOrdenCompra"
+                              process="@this"
+                              async="true"
+                              global="false"
+                              update=":frmOrdenesComp:dataOrdenCompra"
+                              actionListener="#{homeBean.cleanOrdenCompra()}"
+                              />
+
+            <p:remoteCommand  name="cleanOrdenGasto"
+                              process="@this"
+                              async="true"
+                              global="false"
+                              update=":frmOrdenesGasto:dataOrdenGasto,:frmOrdenesGasto:display"
+                              actionListener="#{homeBean.cleanOrdenGasto()}"
+                              />
+
+            <p:remoteCommand  name="cleanPedidos"
+                              process="@this"
+                              async="true"
+                              global="false"
+                              update=":frmFacPedido:dataPedido"
+                              actionListener="#{homeBean.cleanPedidos()}"
+                              />
+        </h:form>
+
+        <pm:view id="main">  
+            <pm:header title="Bienvenido(a) #{loginBean.id_usuario} [#{loginBean.selectedBases_de_datos.nombrebd}]" swatch="b">
+                <f:facet name="right">
+                    <p:commandLink id="btnSalir" onclick="eraseCookie();" actionListener="#{loginBean.invalidarUsuario()}" value="Salir" styleClass="login_out" />
+                </f:facet>
+            </pm:header>
+
+            <pm:content>                
+                <p:outputPanel layout="block" style="padding-right: 15px">
+                    <h:form>
+                        <p:dataList type="inset" styleClass="ui-li-custom">
+                            <f:facet name="header">SELECCIONE UNA OPCION:</f:facet>
+                            <f:attribute name="icon" value="false" />
+                            <h:outputLink value="#ordenCompra" onclick="cleanOrdenCompra();" >ORDEN DE COMPRA</h:outputLink>
+                            <h:outputLink value="#ordenGasto" onclick="cleanOrdenGasto();" >ORDEN DE GASTO</h:outputLink>
+                            <h:outputLink value="#facPedido" onclick="cleanPedidos();" >FACTURACIÓN POR PEDIDO</h:outputLink>
+                            <h:outputLink value="#vwmymasterdetail" onclick="cleanPedidos();" >MY MASTER DETAIL</h:outputLink>
+                        </p:dataList>
+                    </h:form>
+                </p:outputPanel>
+
+            </pm:content>
+
+            <pm:footer swatch="c">
+                <h1 style="font-size: x-small" >V&amp;R PAILL Mobile</h1>         
+                <h1 style="font-size: x-small" >#{loginBean.selectedBases_de_datos.nombrebd}</h1>           
+            </pm:footer>            
+
+        </pm:view>
+
+        <pm:view id="ordenCompra">
+            <pm:header title="Orden de Compra">
+                <f:facet name="left"><p:button value="Back" icon="back" onclick="PrimeFaces.back()"/></f:facet>
+            </pm:header>
+
+            <pm:content>
+                <h:form id="frmOrdenesComp">
+                    <pm:navBar>
+                        <p:commandButton icon="refresh" value="Refrescar" update=":messages:messageError,dataOrdenCompra" actionListener="#{homeBean.searchOrdenCompra()}" process="@form" />
+                        <p:commandButton value="Guardar" icon="check" update=":messages:messageError" actionListener="#{homeBean.saveOrdenesCompra()}" process="@form" />
+                    </pm:navBar>
+
+                    <h:panelGroup layout="block" id="dataOrdenCompra">
+                        <p:inputText id="txtOrdenCompra" value="#{homeBean.idOrdenCompra}" label="No. Orden de Compra" />
+                            <!--  <p:panel  header="Resultado" rendered="{not empty homeBean.selectedOrdenesComp}">
+                          -->
+                        <p:panel  header="Resultado" rendered="#{not empty homeBean.selectedOrdenesComp}">
+                            <p:inputText value="#{homeBean.selectedOrdenesComp.proveedor}" label="Proveedor: " readonly="true" /> 
+                            <p:inputText value="#{homeBean.selectedOrdenesComp.notas}" label="Notas: "  readonly="true" /> 
+                            <pm:switch onLabel="si" offLabel="no" label="Autorizado: " value="#{homeBean.selectedOrdenesComp.autorizada}" />
+
+                            <p:dataTable var="oc" value="#{homeBean.selectedOrdenesComp.child}"  > 
+                                <p:column headerText="Cod. Producto">  
+                                    <h:outputText value="#{oc.idproducto}" />
+                                </p:column>  
+
+                                <p:column headerText="Producto">  
+                                    <h:outputText value="#{oc.producto}" />  
+                                </p:column>  
+
+                                <p:column headerText="Cantidad">  
+                                    <h:outputText value="#{oc.cantidad}">
+                                        <f:convertNumber type="number" groupingUsed="true" />
+                                    </h:outputText>
+                                </p:column>  
+
+                                <p:column headerText="Precio">
+                                    <h:outputText value="#{oc.precio}">
+                                        <f:convertNumber  type="currency" locale="en_us"/>
+                                    </h:outputText>  
+                                </p:column>
+
+                                <p:column headerText="Notas">
+                                    <h:outputText value="#{oc.notas}" />
+                                </p:column>
+
+                            </p:dataTable> 
+                        </p:panel>
+                    </h:panelGroup>
+                </h:form>
+            </pm:content>
+        </pm:view>
+
+        <pm:view id="ordenGasto">
+            <pm:header title="Orden de Gasto">
+                <f:facet name="left"><p:button value="Back" icon="back" onclick="PrimeFaces.back()"/></f:facet>
+            </pm:header>
+
+            <pm:content>
+                <h:form id="frmOrdenesGasto">
+                    <pm:navBar>
+                        <p:commandButton icon="refresh" value="Refrescar" update=":messages:messageError,dataOrdenGasto" actionListener="#{homeBean.searchOrdenGasto()}" process="@form" />
+                        <p:commandButton value="Guardar" icon="check" update="display,:messages:messageError" actionListener="#{homeBean.saveOrdenesGasto()}" process="@form" />
+                    </pm:navBar>
+
+                    <h:panelGroup layout="block" id="dataOrdenGasto">
+                        <p:inputText id="txtOrdenGasto" value="#{homeBean.idOrdenGasto}" label="No. Orden de Gasto" />
+
+                        <p:panel  header="Resultado" rendered="#{not empty homeBean.selectedOrdenesGasto}">
+                            <p:inputText value="#{homeBean.selectedOrdenesGasto.proveedor}" readonly="true" label="Proveedor: " /> 
+                            <p:inputText value="#{homeBean.selectedOrdenesGasto.notas}" readonly="true" label="Notas" /> 
+                            <pm:switch onLabel="si" offLabel="no" label="Autorizado: " value="#{homeBean.selectedOrdenesGasto.autorizada}" />
+
+                            <p:dataTable var="oc" value="#{homeBean.selectedOrdenesGasto.child}"  > 
+                                <p:column headerText="Cod. Producto">  
+                                    <h:outputText value="#{oc.idproducto}" />
+                                </p:column>  
+
+                                <p:column headerText="Producto">  
+                                    <h:outputText value="#{oc.producto}" />  
+                                </p:column>  
+
+                                <p:column headerText="Cantidad">  
+                                    <h:outputText value="#{oc.cantidad}">
+                                        <f:convertNumber type="number" groupingUsed="true" />
+                                    </h:outputText>
+                                </p:column>  
+
+                                <p:column headerText="Precio">
+                                    <h:outputText value="#{oc.precio}">
+                                        <f:convertNumber  type="currency" locale="en_us"/>
+                                    </h:outputText>  
+                                </p:column>
+
+                                <p:column headerText="Notas">
+                                    <h:outputText value="#{oc.notas}" />
+                                </p:column>
+
+                            </p:dataTable> 
+                        </p:panel>
+                    </h:panelGroup>
+
+                    <p:dialog header="Disponibilidad" widgetVar="dlgInsuf" width="300px">  
+                        <p:outputPanel id="display" layout="block" style="text-align: center;min-width: 300px" >                        
+
+                            <p:dataTable var="ins" value="#{homeBean.l_insuficiencia}"  > 
+                                <p:column headerText="Cod. Producto">  
+                                    <h:outputText value="#{ins.idproducto}" />
+                                </p:column>  
+
+                                <p:column headerText="Producto">  
+                                    <h:outputText value="#{ins.producto}" />  
+                                </p:column>  
+
+                                <p:column headerText="Cant.">  
+                                    <h:outputText value="#{ins.cantidad}">
+                                        <f:convertNumber type="number" groupingUsed="true" />
+                                    </h:outputText>
+                                </p:column>  
+
+                                <p:column headerText="Req.">
+                                    <h:outputText value="#{ins.requerido}" />
+                                </p:column>
+
+                                <p:column headerText="Disp.">
+                                    <h:outputText value="#{ins.disponible}" />
+                                </p:column>
+
+                                <p:column headerText="Dif.">
+                                    <h:outputText value="#{ins.diferencia}" />
+                                </p:column>
+
+                                <p:column headerText="CDC.">
+                                    <h:outputText value="#{ins.cdc}" />
+                                </p:column>
+
+                                <p:column headerText="Rubro.">
+                                    <h:outputText value="#{ins.rubro}" />
+                                </p:column>
+
+                                <p:column headerText="Res.">
+                                    <h:outputText value="#{ins.reservado}" />
+                                </p:column>
+
+                            </p:dataTable> 
+
+                        </p:outputPanel>
+                    </p:dialog>   
+                </h:form>
+            </pm:content>
+        </pm:view>
+
+        <pm:view id="facPedido">
+            <pm:header title="Facturación por Pedido">
+                <f:facet name="left"><p:button value="Back" icon="back" onclick="PrimeFaces.back()"/></f:facet>
+            </pm:header>
+
+            <pm:content>
+                <h:form id="frmFacPedido">
+                    <pm:navBar>
+                        <p:commandButton icon="refresh" value="Refrescar" update=":messages:messageError,dataPedido" actionListener="#{homeBean.searchPedido()}" process="@form" />
+                        <p:commandButton value="Guardar" icon="check" update=":messages:messageError" actionListener="#{homeBean.savePedidos()}" process="@form" />
+                    </pm:navBar>
+
+                    <h:panelGroup layout="block" id="dataPedido">
+                        <p:inputText id="txtNoPedido" value="#{homeBean.noPedido}" label="No. Pedido" />
+
+                        <p:panel  header="Resultado" rendered="#{not empty homeBean.selectedPedidos}">
+                            <p:inputText value="#{homeBean.selectedPedidos.idclieprov}" readonly="true" label="IdCliente" /> 
+                            <p:inputText value="#{homeBean.selectedPedidos.clieprov}" readonly="true" label="Cliente" /> 
+                            <p:inputText value="#{homeBean.selectedPedidos.vendedor}" readonly="true" label="Vendedor" /> 
+                            <p:inputText value="#{homeBean.selectedPedidos.terminos}" readonly="true" label="Términos de Pago" /> 
+                            <p:inputText value="#{homeBean.selectedPedidos.notas}" readonly="true" label="Notas" /> 
+                            <pm:switch onLabel="si" offLabel="no" label="Autorizado: " value="#{homeBean.selectedPedidos.autorizado}" />
+                            <pm:switch onLabel="si" offLabel="no" label="Aut. Desc.: " value="#{homeBean.selectedPedidos.autorizardesc}" />
+                            <pm:switch onLabel="si" offLabel="no" label="Auto. Boni. " value="#{homeBean.selectedPedidos.autorizarexceboni}" />
+                            <pm:switch onLabel="si" offLabel="no" label="Aut. Lim. Precio " value="#{homeBean.selectedPedidos.autorizarlimiteprecio}" />
+
+                            <p:dataTable var="pedidos" value="#{homeBean.selectedPedidos.child}"  > 
+                                <p:column headerText="Cod. Producto">  
+                                    <h:outputText value="#{pedidos.idproducto}" />
+                                </p:column>  
+
+                                <p:column headerText="Producto">  
+                                    <h:outputText value="#{pedidos.producto}" />  
+                                </p:column>  
+
+                                <p:column headerText="Cantidad">  
+                                    <h:outputText value="#{pedidos.cantidad}">
+                                        <f:convertNumber type="number" groupingUsed="true" />
+                                    </h:outputText>
+                                </p:column>  
+
+                                <p:column headerText="Bonificación">  
+                                    <h:outputText value="#{pedidos.bonificacion}">
+                                        <f:convertNumber type="number" groupingUsed="true" />
+                                    </h:outputText>
+                                </p:column>  
+
+                                <p:column headerText="Precio">
+                                    <h:outputText value="#{pedidos.precio}">
+                                        <f:convertNumber  type="currency" locale="en_us"/>
+                                    </h:outputText>  
+                                </p:column>
+
+                                <p:column headerText="Tasa Desc.">
+                                    <h:outputText value="#{pedidos.tasadesc}" >
+                                        <f:convertNumber type="number" groupingUsed="true" />
+                                    </h:outputText>
+                                </p:column>
+
+                                <p:column headerText="Precio Neto">
+                                    <h:outputText value="#{pedidos.precioneto}">
+                                        <f:convertNumber  type="currency" locale="en_us"/>
+                                    </h:outputText> 
+                                </p:column>
+
+                                <p:column headerText="Total">
+                                    <h:outputText value="#{pedidos.total}">
+                                        <f:convertNumber  type="currency" locale="en_us"/>
+                                    </h:outputText> 
+                                </p:column>
+
+                            </p:dataTable> 
+
+                        </p:panel>
+                    </h:panelGroup>
+                </h:form>
+            </pm:content>
+        </pm:view>
+        
+         <pm:view id="vwmymasterdetail">
+            <pm:header title="My Master Detaill">
+                <f:facet name="left"><p:button value="Back" icon="back" onclick="PrimeFaces.back()"/></f:facet>
+            </pm:header>
+
+            <pm:content>
+                <h:form id="frmmymasterdetaill">
+               
+
+                    <h:panelGroup layout="block" id="dataPedido">
+                         <p:panel header="Listado" >
+                            <p:dataTable id="dtcd" var="cd" widgetVar="dtcd" value="#{conteoBean.selectedconteos.child}" > 
+                                <p:column headerText="Viñeta" style="white-space: nowrap">
+                                    <h:outputText value="#{cd.idvineta}">
+                                        <f:convertNumber type="number" groupingUsed="false" />
+                                    </h:outputText>  
+                                </p:column>
+
+                                <p:column headerText="Cod." style="white-space: nowrap">  
+                                    <h:outputText value="#{cd.idproducto}" />
+                                </p:column>  
+
+                                <p:column headerText="Producto" style="white-space: nowrap">  
+                                    <h:outputText value="#{cd.nombreproducto}" />  
+                                </p:column>  
+
+                                <p:column headerText="Lote" style="white-space: nowrap">
+                                    <h:outputText value="#{cd.lote}" />
+                                </p:column>
+
+                                <p:column headerText="Cantidad" style="white-space: nowrap">  
+                                    <h:outputText value="#{cd.cantidad}">
+                                        <f:convertNumber type="number" groupingUsed="true" />
+                                    </h:outputText>
+                                </p:column>
+                                <p:column headerText="Estatus" style="white-space: nowrap">  
+                                    <h:outputText value="#{cd.idestatus}">
+                                        <f:convertNumber type="number" groupingUsed="true" />
+                                    </h:outputText>
+                                    
+                                </p:column>  
+                                <p:column headerText="..." style="white-space: nowrap"><!-- actionListener={}" trabajarTemp()" -->
+                                    <p:commandLink value="edit"  update=":frmConteoEdit:dataConteoSel" process="dtcd" action="pm:conteoEdit" >
+                                        <f:setPropertyActionListener value="#{false}" target="#{conteoBean.nuevo}" />
+                                        <f:setPropertyActionListener value="#{cd}" target="#{conteoBean.selectedConteodet}" />
+                                        <f:setPropertyActionListener value="#{true}" target="#{conteoBean.mostrarLote}" />
+                                        <f:setPropertyActionListener value="#{true}" target="#{conteoBean.mostrarEstatus}" />
+                                        <f:setPropertyActionListener value="#{true}" target="#{conteoBean.buscarPorProducto}" />
+                                    </p:commandLink> 
+                                </p:column>
+                                <p:column headerText="..." style="white-space: nowrap">
+                                    <p:commandLink value="Del" update=":frmConteo1:pgConfirm1" process="dtcd" onclick="dlgConfirm.show()" >
+                                        <f:setPropertyActionListener value="#{cd}" target="#{conteoBean.selectedConteodet}" />
+                                    </p:commandLink>
+                                    <!--<p:commandLink value="Del" update=":frmConteo1:dtcd" actionListener="#{conteoBean.eliminarConteo(true)}" process="dtcd" >
+                                        <f:setPropertyActionListener value="#{cd}" target="#{conteoBean.selectedConteodet}" />
+                                    </p:commandLink> -->
+                                </p:column>
+                                <!--<p:column headerText="..." style="white-space: nowrap">actionListener={}" trabajarTemp()"
+                                    <p:commandLink value="Reco"  update=":frmreconteo:dataConteoSel" process="dtcd" action="pm:reconteo" >
+                                        <f:setPropertyActionListener value="#{cd}" target="#{conteoBean.selectedConteodet}" />
+                                        <f:setPropertyActionListener value="#{false}" target="#{conteoBean.nuevo}" />
+                                        <f:setPropertyActionListener value="#{true}" target="#{conteoBean.mostrarLote}" />
+                                        <f:setPropertyActionListener value="#{true}" target="#{conteoBean.mostrarEstatus}" />
+
+                                    </p:commandLink> 
+                                </p:column>-->
+                            </p:dataTable>                                 
+                     
+                        </p:panel>
+                        
+                             <pm:navBar>
+                        <p:commandButton icon="refresh" value="Refrescar" update=":messages:messageError,dataPedido" actionListener="#{homeBean.searchPedido()}" process="@form" />
+                        <p:commandButton value="Guardar" icon="check" update=":messages:messageError" actionListener="#{homeBean.savePedidos()}" process="@form" />
+                    </pm:navBar>
+                    </h:panelGroup>
+                </h:form>
+            </pm:content>
+        </pm:view>
+            
+    </pm:page>
+
+</f:view>

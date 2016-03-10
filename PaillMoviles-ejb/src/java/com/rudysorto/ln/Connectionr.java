@@ -34,8 +34,14 @@ public class Connectionr {
    }
    /* Other methods protected by singleton-ness */
    public static String conectar(String uid, String password ) {
+       
+     
        String resp ;
          try {
+               if(connection != null){
+           connection.close();
+            System.out.println("Si habia abierta se cerró");
+       }
         Class.forName(SQL_JDBC_DRIVER);// Register jdbc driver
         System.out.println("****Connect to Database****");
         //4. open a connection
@@ -44,7 +50,11 @@ public class Connectionr {
         System.out.println("URL: "+ connection.getMetaData().getURL());
         resp = "OK";
        // setConnectionClose();
-        System.out.println("Database Connection Closed");
+       
+        if(connection != null){
+           connection.close();
+            System.out.println("Cierra la se creo adrede");
+       }
     } catch (Exception e) {
         e.printStackTrace();
         System.err.println("Exception in getLocalConeection() "+e.getMessage());

@@ -91,6 +91,33 @@ public class Clientes implements Serializable {
     @Size(min = 1, max = 200)
     @Column(name = "Nombre")
     private String nombre;
+     @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 200)
+    @Column(name = "RegFiscal")
+    private String regFiscal;
+      @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 200)
+    @Column(name = "IdVendedor")
+    private String idVendedor;
+       @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 200)
+    @Column(name = "TasaDesc")
+    private String tasaDesc;
+        @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 200)
+    @Column(name = "IdEscala")
+    private String IdEscala;
+           @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 200)
+    @Column(name = "TipoIVA")
+    private String TipoIVA;
+        
+        
     /*
     @Basic(optional = false)
     @NotNull
@@ -274,20 +301,30 @@ public class Clientes implements Serializable {
        
     }
 
-   /* public Clientes(String idCliente, String nombre, String razonSocial, String tipoIVA, boolean bonificacion, BigDecimal tasaDesc, BigDecimal limite, int vencimiento, boolean activo, String idCtaCont1, String bitacora) {
-        this.idCliente = idCliente;
-        this.nombre = nombre;
-        this.razonSocial = razonSocial;
-        this.tipoIVA = tipoIVA;
-        this.bonificacion = bonificacion;
-        this.tasaDesc = tasaDesc;
-        this.limite = limite;
-        this.vencimiento = vencimiento;
-        this.activo = activo;
-        this.idCtaCont1 = idCtaCont1;
-        this.bitacora = bitacora;
+    /* public Clientes(String idCliente, String nombre, String razonSocial, String tipoIVA, boolean bonificacion, BigDecimal tasaDesc, BigDecimal limite, int vencimiento, boolean activo, String idCtaCont1, String bitacora) {
+    this.idCliente = idCliente;
+    this.nombre = nombre;
+    this.razonSocial = razonSocial;
+    this.tipoIVA = tipoIVA;
+    this.bonificacion = bonificacion;
+    this.tasaDesc = tasaDesc;
+    this.limite = limite;
+    this.vencimiento = vencimiento;
+    this.activo = activo;
+    this.idCtaCont1 = idCtaCont1;
+    this.bitacora = bitacora;
     }
-*/
+     */
+    public String getTipoIVA() {
+        return TipoIVA;
+    }
+
+    public void setTipoIVA(String TipoIVA) {
+        this.TipoIVA = TipoIVA;
+    }
+  
+  
+  
     public String getIdCliente() {
         return idCliente;
     }
@@ -303,6 +340,40 @@ public class Clientes implements Serializable {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+
+    public String getRegFiscal() {
+        return regFiscal;
+    }
+
+    public void setRegFiscal(String regFiscal) {
+        this.regFiscal = regFiscal;
+    }
+
+    public String getIdVendedor() {
+        return idVendedor;
+    }
+
+    public void setIdVendedor(String idVendedor) {
+        this.idVendedor = idVendedor;
+    }
+
+    public String getTasaDesc() {
+        return tasaDesc;
+    }
+
+    public void setTasaDesc(String tasaDesc) {
+        this.tasaDesc = tasaDesc;
+    }
+
+    public String getIdEscala() {
+        return IdEscala;
+    }
+
+    public void setIdEscala(String IdEscala) {
+        this.IdEscala = IdEscala;
+    }
+    
+    
 /*
     public String getRazonSocial() {
         return razonSocial;
